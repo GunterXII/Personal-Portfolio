@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio di Bernardo, Web Developer specializzato in frontend development">
+    <meta name="keywords" content="web developer, frontend, portfolio, HTML, CSS, JavaScript">
+    <title>Bernardo - Web Developer Portfolio</title>
+
+
+    <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="icon" href="favicon/favicon(1).ico" type="image/x-icon">
+
+</head>
+<body>
+ 
+    <audio id="background-audio" src="favicon/629164_holizna_spacey-lofi-loop-86-bpm (online-audio-converter.com).mp3" loop></audio>
+
+<section class="home">
+    <span id="dark-toggle" aria-label="Toggle Dark Mode">🌙</span>
+    <div class="container">
+        <!-- Sidebar (semantico) -->
+        <aside class="sidebar">
+            <div id="logo">
+                <img src="img/laptop.png" alt="Logo: laptop">
+                <p class="bernardo">Bernardo</p>
+                <p class="sottotitolo">Web Developer</p>
+            </div>
+
+            <nav aria-label="Menu principale">
+                <ul>
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="skills.html">Skills</a></li>
+                    <li><a href="progetti.html">Progetti</a></li>
+
+                    <!--aggiungo rel per sicurezza -->
+                    <li class="icone">
+                        <a href="https://www.linkedin.com/feed/?trk=sem-ga_campid.20677489327_asid.153452322614_crid.677545198980_kw.linkedin_d.c_tid.kwd-148086543_n.g_mt.e_geo.1008393" target="_blank" rel="noopener noreferrer">
+                          <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+                          <span class="sr-only">LinkedIn</span>
+                        </a>
+                        <a href="https://github.com/GunterXII" target="_blank" rel="noopener noreferrer">
+                          <i class="fa-brands fa-github" aria-hidden="true"></i>
+                          <span class="sr-only">GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="sound">
+                <p class="code html">&lt;html&gt;</p>
+                <div class="sound2" role="button" aria-pressed="false" tabindex="0">
+                    <i class="fa-brands fa-soundcloud" aria-hidden="true"></i> Sound <span>OFF</span>
+                </div>
+            </div>
+
+            <p class="code body">&lt;body&gt;</p>
+            <p class="code h1">&lt;h1&gt;</p>
+
+            <div class="zmoji">
+                <div class="scritta">
+                    <p id="line1">Ciao,</p>
+                    <div class="name">
+                        <span class="animated-text" id="sono">Sono</span>
+                        <img src="img/letter-b.png" alt="Lettera B">
+                        <span class="animated-text" id="ernardo">ernardo,</span>
+                    </div>
+                    <p class="animated-text" id="line3"> Web <span class="accent-text animated-text">Developer</span></p>
+                </div>
+
+                <div class="img-container">
+                    <img src="img/laptop wave.png" alt="Emoji che saluta"> 
+                    <!-- button: aggiungo type e aria-label per accessibilità -->
+                    <a href="https://wa.me/393339115470"><button type="button" aria-label="Contattami" data-phone="+39 3339115470" data-label="Contattami" class="contact">
+                      <i class="fas fa-paper-plane" aria-hidden="true"></i> Contattami!
+                    </button></a>
+                </div>
+            </div>
+
+            <p class="code h1 lasth1">&lt;/h1&gt;</p>
+            <p class="code p">&lt;p&gt;</p>
+            <p class="frontend"><span class="highlight">Frontend</span> Developer</p>
+            <p class="code p lastp">&lt;/p&gt;</p>
+            <p class="code html lasthtml">&lt;/html&gt;</p>
+            <p class="code body lastbody">&lt;/body&gt;</p>
+        </main>
+    </div>
+
+<!-- Script anime.js -->
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+
+<script>
+const toggleBtn = document.getElementById('dark-toggle');
+const body = document.body;
+
+toggleBtn.addEventListener('click', () => {
+  body.classList.toggle('dark');
+    
+  // Cambia icona del bottone a seconda del tema
+  if (body.classList.contains('dark')) {
+    toggleBtn.textContent = '☀️';
+    document.querySelectorAll("p").forEach(p=>{
+        p.style.color="#f8f9fa"
+    })
+  } else {
+    toggleBtn.textContent = '🌙';
+    document.querySelectorAll("p").forEach(p=>{
+        p.style.color="#212529"
+    })
+  }
+
+  // Salva la scelta in localStorage 
+  if (body.classList.contains('dark')) {
+    localStorage.setItem('theme', 'dark');
+  } else {
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+// All’avvio della pagina, controlla se c’è tema salvato
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    toggleBtn.textContent = '☀️';
+  }
+});
+
+function splitText(element) {
+  if (!element) return;
+  const text = element.textContent.trim();
+  element.textContent = ''; // svuota il contenitore
+
+  const words = text.split(' ');
+  words.forEach((word, wIndex) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.className = 'word';
+    wordSpan.style.display = 'inline-block'; 
+
+    [...word].forEach(ch => {
+      const charSpan = document.createElement('span');
+      charSpan.className = 'char';
+      charSpan.textContent = ch;
+     
+      charSpan.style.display = 'inline-block';
+      wordSpan.appendChild(charSpan);
+    });
+
+    element.appendChild(wordSpan);
+    // aggiungo lo spazio tra le parole (testo normale)
+    if (wIndex < words.length - 1) element.appendChild(document.createTextNode(' '));
+  });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  splitText(document.getElementById('line1'));
+  splitText(document.getElementById('sono'));
+  splitText(document.getElementById('ernardo'));
+  splitText(document.getElementById('line3'));
+
+  // Animazione con anime.js
+  setTimeout(() => {
+    anime.timeline({
+      easing: 'easeOutExpo',
+      duration: 750
+    })
+    .add({
+      targets: '#line1 .char',
+      translateY: [100, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(50)
+    })
+    .add({
+      targets: '#sono .char, #ernardo .char',
+      translateY: [100, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(30)
+    }, '-=500')
+    .add({
+      targets: '#line3 .char',
+      translateY: [100, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(40)
+    }, '-=500');
+  }, 500);
+
+  /* ---------- comportamenti UI ---------- */
+  const btn = document.querySelector('button[type="button"]');
+  if (btn) {
+    btn.addEventListener('mouseenter', function() {
+      this.innerHTML = '<i class=\"fas fa-paper-plane\"></i> Scrivimi ora!';
+    });
+    btn.addEventListener('mouseleave', function() {
+      this.innerHTML = '<i class=\"fas fa-paper-plane\"></i> Contattami!';
+    });
+  }
+
+  const navItems = document.querySelectorAll('nav ul li:not(.icone)');
+  navItems.forEach(item => {
+    item.addEventListener('mouseenter', () => item.style.transform = 'translateX(8px)');
+    item.addEventListener('mouseleave', () => item.style.transform = 'translateX(0)');
+  });
+
+  const soundToggle = document.querySelector('.sound2');
+  const audio = document.getElementById('background-audio');
+  if (soundToggle && audio) {
+    soundToggle.addEventListener('click', function() {
+      const soundText = this.querySelector('span');
+      if (!soundText) return;
+      if (soundText.textContent.trim() === 'OFF') {
+        audio.play().catch(e => console.warn('Playback prevented:', e));
+        soundText.textContent = 'ON';
+        soundText.style.color = '#43bccd';
+        this.setAttribute('aria-pressed', 'true');
+      } else {
+        audio.pause();
+        soundText.textContent = 'OFF';
+        soundText.style.color = '#f9c80e';
+        this.setAttribute('aria-pressed', 'false');
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>

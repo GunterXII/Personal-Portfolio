@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it"> <!-- Lingua cambiata in italiano -->
+<head>
+    <!-- Configurazione base della pagina -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Convertitore di Valuta</title> <!-- Titolo tradotto -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Collegamento a FontAwesome per le icone -->
+    <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Contenitore principale -->
+    <div class="wrapper">
+        <!-- Intestazione tradotta -->
+        <header>Convertitore di Valuta</header>
+        
+        <!-- Form con ID aggiunto -->
+        <form id="converterForm">
+            <!-- Sezione importo tradotta -->
+            <div class="amount">
+                <p>Inserisci Importo</p>
+                <!-- Input numerico con validazione -->
+                <input type="number" value="1" min="0">
+            </div>
+            
+            <!-- Contenitore per le sezioni di selezione -->
+            <div class="drop-list">
+                <!-- Sezione "Da" -->
+                <div class="from">
+                    <p>Da</p> <!-- Tradotto -->
+                    <div class="select-box">
+                        <!-- Bandiera predefinita USA -->
+                        <img src="https://flagsapi.com/US/flat/64.png" alt="bandiera">
+                        <!-- Select vuoto (popolato via JS) -->
+                        <select></select>
+                    </div>
+                </div>
+                
+                <!-- Icona di scambio -->
+                <div class="icon">
+                    <i class="fa-solid fa-right-left"></i>
+                </div>
+                
+                <!-- Sezione "A" -->
+                <div class="to">
+                    <p>A</p> <!-- Tradotto -->
+                    <div class="select-box">
+                        <!-- Bandiera predefinita Nepal -->
+                        <img src="https://flagsapi.com/NP/flat/64.png" alt="bandiera">
+                        <!-- Select vuoto (popolato via JS) -->
+                        <select></select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testo del tasso di cambio (esempio tradotto) -->
+            <div class="exchange-rate">1 USD = 0.92 EUR</div>
+            
+            <!-- Bottone tradotto -->
+            <button>Converti Valuta</button>
+        </form>
+    </div>
+
+    <!-- Scripts (ordine corretto) -->
+    <script src="coutrylist.js"></script> <!-- Prima la lista paesi -->
+    <script src="index.js"></script>     <!-- Poi la logica -->
+</body>
+</html>

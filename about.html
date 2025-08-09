@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About di Bernardo — studente di informatica e frontend developer" />
+  <title>About Me - Bernardo</title>
+
+  <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+ 
+  <link rel="icon" href="favicon/favicon(2).ico" type="image/x-icon" />
+
+ 
+  <link rel="stylesheet" href="css/about.css" />
+
+</head>
+<body>
+  <div class="container">
+
+    <!-- Testo decorativo "floating" (se li usi come sfondo) -->
+    <div class="floating-text" aria-hidden="true">console.log("Hello World!");</div>
+    <div class="floating-text" aria-hidden="true">function createPortfolio() { ... }</div>
+    <div class="floating-text" aria-hidden="true">const developer = new WebDeveloper();</div>
+
+    <!-- Sezione ABOUT -->
+    <main class="about">
+      <!-- titolo animato: lo script aggiunge .letter con delay -->
+      <h1 id="about-title" class="about-title">About-Me</h1>
+            <span id="dark-toggle" aria-label="Toggle Dark Mode">🌙</span>
+      <div class="container-img-bio">
+        <!-- FOTO + SOCIAL -->
+        <figure class="immagine">
+          <img src="img/sunglasses emoji.png" alt="Emoji con occhiali da sole che sorride" />
+          <figcaption class="sr-only">Bernardo - Web Developer</figcaption>
+
+          <div class="icone" aria-label="Link social">
+            <a href="https://www.linkedin.com/feed/?trk=sem-ga_campid.20677489327_asid.153452322614_crid.677545198980_kw.linkedin_d.c_tid.kwd-148086543_n.g_mt.e_geo.1008393" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn di Bernardo">
+              <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+              <span class="sr-only">LinkedIn</span>
+            </a>
+
+            <a href="https://github.com/GunterXII" target="_blank" rel="noopener noreferrer" aria-label="GitHub di Bernardo">
+              <i class="fa-brands fa-github" aria-hidden="true"></i>
+              <span class="sr-only">GitHub</span>
+            </a>
+
+            <!-- link alla home del portfolio -->
+            <a href="index.html" aria-label="Torna alla home">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              <span class="sr-only">Home</span>
+            </a>
+          </div>
+        </figure>
+
+        <!-- BIO -->
+        <section class="bio" id="about">
+          <p>
+            Hello World! Sono <strong>Bernardo</strong>, uno studente di informatica di 20 anni appassionato di sviluppo web e tecnologie digitali.
+          </p>
+
+          <p>
+            Attualmente sto realizzando progetti in vanilla
+            <span class="tech-icons" aria-hidden="true">
+            
+              <img src="img/jss.png" alt="Icona JavaScript" />
+              <img src="img/Other-html-5-icon.png" alt="Icona HTML5" />
+              <img src="img/css3-512.png" alt="Icona CSS3" />
+            </span>
+            e mi piace trasformare le mie idee in pagine web funzionali e curate nei dettagli. Ho già realizzato piccoli progetti come pagine responsive, animazioni e giochi interattivi.
+          </p>
+
+          <p>
+            In questo momento sto approfondendo <strong>React</strong> e le animazioni con <strong>Anime.js</strong>, con l'obiettivo di migliorare l'esperienza utente nei miei progetti.
+          </p>
+
+          <p>
+            Oltre al coding, adoro i videogiochi e la musica, che spesso mi ispirano nuove idee per interfacce creative e interattive.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- SCRIPT: animazione titolo (funziona con gli span .letter) -->
+  <script>
+    (function animateTitle() {
+      const title = document.getElementById("about-title");
+      if (!title) return;
+      const text = title.textContent || '';
+      title.textContent = '';
+
+      [...text].forEach((letter, i) => {
+        const span = document.createElement("span");
+        span.className = 'letter';
+        span.textContent = letter;
+        // aggiungiamo il delay tramite style inline (va bene per semplicità)
+        span.style.animationDelay = `${i * 0.06}s`; // ogni lettera +0.06s
+        title.appendChild(span);
+      });
+    })();
+    const toggleBtn = document.getElementById('dark-toggle');
+const body = document.body;
+
+toggleBtn.addEventListener('click', () => {
+  body.classList.toggle('dark');
+
+  // Cambia icona del bottone a seconda del tema
+  if (body.classList.contains('dark')) {
+    toggleBtn.textContent = '☀️';
+  } else {
+    toggleBtn.textContent = '🌙';
+  }
+
+  // Salva la scelta in localStorage (così rimane anche se ricarichi)
+  if (body.classList.contains('dark')) {
+    localStorage.setItem('theme', 'dark');
+  } else {
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+// All’avvio della pagina, controlla se c’è tema salvato
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    toggleBtn.textContent = '☀️';
+  }
+});
+
+  </script>
+</body>
+</html>

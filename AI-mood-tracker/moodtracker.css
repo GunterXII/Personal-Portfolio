@@ -1,0 +1,53 @@
+ body {
+      background-color: #1a1a1a;
+      color: #00ff88;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    #contenitore {
+      margin-top: 20px;
+    }
+    textarea {
+      width: 80%;
+      max-width: 500px;
+      height: 120px;
+      border-radius: 12px;
+      border: 2px solid #00ff88;
+      background-color: #222;
+      color: #00ff88;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      padding: 10px;
+      resize: none;
+    }
+    #feel {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #00ff88;
+      border: none;
+      border-radius: 20px;
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+    }
+    #response {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 40px;
+    }
+    #grafico {
+      margin-top: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #00ff88;
+    }
+    canvas {
+      background-color: #222;
+      border-radius: 12px;
+    }

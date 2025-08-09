@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Benvenuto - Mood Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    /* Stili base per la pagina */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a1a, #004d40);
+      font-family: 'Orbitron', sans-serif;
+      color: #00ff88;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-align: center;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #00ff88;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 320px;
+    }
+
+    input[type="text"] {
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      border: 2px solid #00ff88;
+      background-color: #222;
+      color: #00ff88;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    input[type="text"]:focus {
+      border-color: #00ffaa;
+      box-shadow: 0 0 15px #00ffaa;
+    }
+
+    button {
+      padding: 15px 0;
+      background-color: #00ff88;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00ff88;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #00cc6a;
+      box-shadow: 0 0 25px #00cc6a;
+    }
+
+    button:active {
+      background-color: #00994d;
+      box-shadow: 0 0 15px #00994d;
+    }
+
+    /* Messaggio di errore */
+    .error {
+      color: #ff4444;
+      font-size: 0.9rem;
+      text-align: center;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ciao! Come ti chiami?</h1>
+  <form id="formNome">
+    <input
+      type="text"
+      id="nomeInput"
+      placeholder="Inserisci il tuo nome"
+      autocomplete="off"
+    
+      minlength="2"
+      maxlength="20"
+    />
+    <div class="error" id="errorMsg"></div>
+    <button type="submit">Inizia</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('formNome');
+    const nomeInput = document.getElementById('nomeInput');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nome = nomeInput.value.trim();
+
+      if (nome.length < 2) {
+        errorMsg.textContent = 'Inserisci un nome valido (almeno 2 lettere).';
+        return;
+      }
+
+      // Salva il nome in localStorage
+      localStorage.setItem('nomeUtente', nome);
+
+      // Vai alla pagina moodtracker.html
+      window.location.href = 'moodtracker.html';
+    });
+
+    // Pulisce il messaggio di errore quando l’utente scrive
+    nomeInput.addEventListener('input', () => {
+      errorMsg.textContent = '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Skills - Bernardo</title>
+    <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon/favicon(3).ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/skills.css">
+</head>
+<body>
+    <div class="container">
+        <div class="floating-text">const skills = [ "HTML", "CSS", "JavaScript" ];</div>
+        <div class="floating-text">function showProgress() { ... }</div>
+        <div class="floating-text">animateSkills();</div>
+       
+        <section id="skills">
+            <h1>My Skills<a href="index.html" title="home" class="ci"><i class="fa fa-home ci" aria-hidden="true"></i></a></h1>
+        <div class="certificati">
+        <a class="cert"href="https://www.freecodecamp.org/certification/fcc5cfa3eac-4a13-46f7-bf6c-36ddd15e655f/responsive-web-design" target="_blank">Certificato WEB DESIGN</a>
+        <a href="https://www.freecodecamp.org/certification/fcc5cfa3eac-4a13-46f7-bf6c-36ddd15e655f/javascript-algorithms-and-data-structures-v8" class="cert" target="_blank">Certificato Javascript</a>
+       </div>
+            <div class="skills-container">
+                <div class="skill html">
+                    <h2>
+                        <div class="icon-container">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        HTML
+                    </h2>
+                    <p>Struttura chiara, uso corretto dei tag semantici, layout responsive di base.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" data-percent="80">
+                            <div class="progress-value">80%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill css">
+                    <h2>
+                        <div class="icon-container">
+                            <i class="fab fa-css3-alt"></i>
+                        </div>
+                        CSS
+                    </h2>
+                    <p>Stile curato, uso di Flexbox e Grid, animazioni semplici.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" data-percent="80">
+                            <div class="progress-value">80%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill js">
+                    <h2>
+                        <div class="icon-container">
+                            <i class="fab fa-js"></i>
+                        </div>
+                        JavaScript
+                    </h2>
+                    <p>Manipolazione DOM, eventi, animazioni e logica di base.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" data-percent="70">
+                            <div class="progress-value">70%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animazione delle progress bar
+            const progressBars = document.querySelectorAll('.progress-bar');
+            
+            progressBars.forEach(bar => {
+                const percent = bar.getAttribute('data-percent');
+                bar.style.width = percent + '%';
+            });
+            
+        })
+    </script>
+</body>
+</html>

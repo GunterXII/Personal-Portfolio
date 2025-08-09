@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="moodtracker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1 id="titolo"></h1> <!--qua vorrei scrivere buongiorno o buonasera in base all ora in cui scrive inooltre vorrei scrivere il suo nome, quindi vorrei una pagina precedente in cui gli chiedo il nome e vorrei che venga salvato in memoria-->
+    <div id="contenitore">
+        <textarea id="mood" placeholder="dimmi come stai..." rows="20" cols="50"></textarea>
+        <span><button id="feel">Invia</button></span>
+        <div id="response"></div> <!--qui vorrei metterci una risposta controllata con regex-->
+        <div id="grafico">
+            <canvas id="moodChart" width="400" height="200"></canvas>
+
+        </div>  <!--qui vorrei metterci un grafico che tiene conto della cronologia, un grafico x y che sale di 100y se sta molto bene, di 50y se ta bene, oppure scende se sta male-->
+    </div>
+
+<script src="moodtracker.js"></script>
+</body>
+</html>

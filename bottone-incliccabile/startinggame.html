@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="startinggame.css">
+    <title>Starting game</title>
+</head>
+<body>
+    <button id="bottone">Start</button>
+    <script>
+
+        const bottone=document.getElementById("bottone")
+        bottone.addEventListener("click",()=>{
+            bottone.classList.add("animazione")
+        })
+        bottone.addEventListener("animationend",()=>{
+             const div1=document.createElement("div")
+            const div2=document.createElement("div")
+            const div3=document.createElement("div")
+            const paragrafo=document.createElement("p")
+            paragrafo.classList.add("scritta")
+            paragrafo.textContent="WAITING"
+
+            document.body.appendChild(paragrafo)
+            div1.classList.add("div1")
+            div2.classList.add("div2")
+            div3.classList.add("div3")
+            document.body.appendChild(div1)
+            document.body.appendChild(div2)
+            document.body.appendChild(div3)
+            // Variabile per contare quante animazioni sono finite
+    let animazioniFinite = 0;
+
+    function controlloAnimazione() {
+        animazioniFinite++;
+        if (animazioniFinite === 3) {
+            // tutte e 3 le animazioni sono finite, cambia pagina
+            window.location.href = "bottone.html";
+        }
+    }
+
+    // aggiungo listener a ogni div
+    div1.addEventListener("animationend", controlloAnimazione);
+    div2.addEventListener("animationend", controlloAnimazione);
+    div3.addEventListener("animationend", controlloAnimazione);
+        })
+           
+    </script>
+</body>
+</html>
