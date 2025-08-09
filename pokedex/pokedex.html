@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Er Pokedext</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <h1 class="title">Pokédex</h1>
+    <div class="contenitore">
+        <div class="pokedex1">
+            <div class="bottoni">
+                <div class="blu"></div>
+                <div class="rosso"></div>
+                <div class="giallo"></div>
+                <div class="verde"></div>
+            </div>
+            <div class="schermogrigio">
+                <div class="bottoni2">
+                    <div class="rosso"></div>
+                    <div class="rosso"></div>
+                </div>
+                
+                <div class="schermonero">
+                    <p>Name: <span id="nome">Ditto</span></p>
+                    <p>Hp: <span id="hp">100</span></p>
+                    <p>Weight: <span id="weight">100</span></p>
+                    <p>Abilità: <span id="abilita">Trans</span> </p>
+                    <img src="" alt="" width="" id="sprite">
+                </div>
+                <div class="bottonifinali">
+                    <div class="rosso"></div>
+                    <div class="linee">
+                        <div class="linea"></div>
+                        <div class="linea"></div>
+                        <div class="linea"></div>
+                        <div class="linea"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottoni3">
+                <div class="bottonero"></div>
+                <div class="cosarossa"></div>
+                <div class="cosablu"></div>
+            </div>
+            <div class="basso">
+                <div class="schermoverde"></div>
+                <img src="" alt="" width="60px">
+            </div>
+        </div>
+        <div class="pokedex2">
+            <div class="secondonero">
+                <input type="text" placeholder="Insersci Pokemon" id="pokemon">
+            </div>
+            <div class="cellablu">
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+                <div class="cella"></div>
+            </div>
+            <div class="biancoblu">
+                <div class="biancone">
+                    <div class="bianco"></div>
+                <div class="bianco"></div>
+                </div>
+                
+                <div class="perblu">
+                    <div class="cosablu2"></div>
+                <div class="cosablu2"></div>
+                </div>
+                <div class="giallo2"></div>
+            </div>
+             <div class="schermofondo">
+            <div class="nero2"></div>
+            <div class="nero2"></div>
+        </div>
+        </div>
+       
+    </div>
+    <script>
+ // 🔁 Funzione asincrona che prende i dati di un Pokémon dalla PokeAPI
+async function prendiDati() {
+  // 1️⃣ Otteniamo il valore inserito dall'utente nell'input con id="pokemon"
+  const nomePokemon = document.getElementById("pokemon").value.toLowerCase(); // es. "ditto"
+
+  try {
+    // 2️⃣ Facciamo una fetch all'API con il nome del Pokémon
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nomePokemon}`);
+
+    // 3️⃣ Controlliamo se la risposta è andata a buon fine
+    if (!response.ok) {
+      throw new Error("Errore: Pokémon non trovato!");
+    }
+
+    // 4️⃣ Convertiamo la risposta in formato JSON
+    const data = await response.json();
+
+    // 5️⃣ Passiamo i dati alla funzione che aggiorna il DOM
+    modificaPokedex(data);
+  } catch (error) {
+    console.error("Errore nella fetch:", error);
+    alert("Pokémon non trovato! Controlla il nome e riprova.");
+  }
+}
+
+// 🧬 Funzione che aggiorna il DOM con i dati del Pokémon
+function modificaPokedex(pokemon) {
+  const nome = document.getElementById("nome");
+  const hp = document.getElementById("hp");
+  const weight = document.getElementById("weight");
+  const abilita = document.getElementById("abilita");
+  const sprite = document.getElementById("sprite");
+
+  // Assegniamo i valori
+  nome.textContent = pokemon.name;
+  hp.textContent = pokemon.stats[0].base_stat; // HP è il primo in stats
+  weight.textContent = pokemon.weight 
+  abilita.textContent = pokemon.abilities[0].ability.name;
+  sprite.src = pokemon.sprites.front_default; // immagine frontale
+}
+document.getElementById("pokemon").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    prendiDati(); // Chiama la funzione quando premi Invio
+  }
+});
+
+    </script>
+</body>
+</html>

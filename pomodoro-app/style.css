@@ -1,0 +1,76 @@
+/* BODY: sfondo e full-screen flex container */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;      /* centro orizzontale */
+  align-items: center;          /* centro verticale */
+  background-color: #c5e3c6;     /* verde salvia */
+  background-image: url('smiley.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  font-family: sans-serif;
+}
+
+/* CONTENITORE PRINCIPALE: colonna centrata */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;      /* centro verticale all’interno */
+  align-items: center;          /* centro orizzontale all’interno */
+  text-align: center;
+}
+
+/* POMODORO + TIMER: dimensioni fisse, centrato */
+.pomodoro-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.pomodoro-container .progress-ring__circle {
+  transition: stroke-dashoffset 1s linear;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.pomodoro-container #timer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 5px black;
+  user-select: none;
+}
+
+/* BUTTONS: margin only vertical spacing */
+.buttons {
+  margin-top: 30px;  /* spazio tra pomodoro e bottoni */
+  display: flex;
+  gap: 20px;         /* spazio uniforme tra i bottoni */
+}
+
+button {
+  background-color: #5f8d4e;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #4e733e;
+  transform: translateY(-5px);
+}
+
+button:active {
+  transform: scale(0.97);
+}

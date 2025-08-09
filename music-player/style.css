@@ -1,0 +1,314 @@
+/* 1. Variabili globali */
+:root {
+  --bg-page: #1f1f2e;
+  --card-bg: #2c2c3e;
+  --accent: #ff6b81;
+  --accent-light: #ff6b81aa;
+  --text-main: #e0def4;
+  --text-sub: #a6adc8;
+  --radius: 1rem;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --transition: 0.3s ease;
+}
+
+/* 2. Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Corpo e layout */
+body {
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.container {
+  padding: 1rem;
+}
+
+/* 4. Card del player */
+.music-player {
+  background: var(--card-bg);
+  width: 360px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform var(--transition);
+}
+.music-player:hover {
+  transform: translateY(-5px);
+}
+
+/* 5. Nav con icone */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+nav .circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--card-bg);
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+nav .circle:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* 6. Immagine di copertina */
+.song-img {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 4px solid var(--card-bg);
+  box-shadow: var(--shadow);
+}
+
+/* 7. Titolo e artista */
+.music-player h1 {
+  text-align: center;
+  font-size: 1.25rem;
+  margin: 1rem 0 0.25rem;
+  color: var(--text-main);
+}
+.music-player p {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  margin-bottom: 1rem;
+}
+
+/* 8. Nascondi player nativo e style progress */
+audio {
+  display: none; /* usiamo il nostro play/pause */
+}
+#progress {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--accent-light);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+#progress:hover {
+  background: var(--accent);
+}
+#progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--card-bg);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+/* 9. Controlli personalizzati */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+.controls div {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--card-bg);
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.controls div:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.1);
+}
+/* Ingrandisce il tasto centrale (play/pause) di default */
+.controls div:nth-child(2) {
+  transform: scale(1.2);
+  background: var(--accent);
+  color: #fff;
+}
+/* Barra di ricerca */
+.search-bar {
+  width: 360px;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--radius);
+  border: none;
+  outline: none;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  box-shadow: var(--shadow);
+  transition: background var(--transition), box-shadow var(--transition);
+}
+
+.search-bar input::placeholder {
+  color: var(--text-sub);
+}
+
+.search-bar input:focus {
+  background-color: #33334d;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.search-bar button {
+  background-color: var(--accent);
+  border: none;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), transform var(--transition);
+}
+
+.search-bar button:hover {
+  background-color: #ff4f6e;
+  transform: scale(1.05);
+}
+.hidden {
+  display: none;
+}
+/* ========== Playlist Container ========== */
+#playlistContainer {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  max-height: 200px;               /* evita troppa lunghezza */
+  overflow-y: auto;                /* scroll interno se necessario */
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Ogni voce della playlist */
+#playlistContainer li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--accent-light);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+#playlistContainer li:last-child {
+  border-bottom: none;
+}
+#playlistContainer li:hover {
+  background: var(--accent-light);
+  color: var(--text-page);         /* testo contrastato sul background accent */
+}
+
+/* Icona “play” accanto al titolo */
+#playlistContainer li::before {
+  content: "\f144";                /* unicode FontAwesome per play */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 0.75rem;
+  opacity: 0.6;
+  transition: opacity var(--transition);
+}
+#playlistContainer li:hover::before {
+  opacity: 1;
+}
+
+/* ========== Pulsanti “Crea playlist” e “Aggiungi” ========== */
+#openPlaylistForm,
+#playlistForm button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), transform var(--transition);
+}
+#openPlaylistForm i,
+#playlistForm button i {
+  font-size: 1rem;
+}
+
+/* Hover effetti sui bottoni */
+#openPlaylistForm:hover,
+#playlistForm button:hover {
+  background: #ff4f6e;
+  transform: translateY(-2px);
+}
+
+/* ========== Form Container ========== */
+#playlistFormContainer {
+  max-width: 360px;
+  margin: 0.5rem auto;
+  padding: 0.75rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+#playlistFormContainer.show {
+  display: block;
+  opacity: 1;
+}
+
+/* Input testo all’interno del form */
+#playlistForm input[type="text"] {
+  width: calc(100% - 2rem);
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: calc(var(--radius) / 2);
+  background: #33334d;
+  color: var(--text-main);
+  outline: none;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+  transition: background var(--transition), box-shadow var(--transition);
+}
+#playlistForm input[type="text"]:focus {
+  background: #3f3f5a;
+  box-shadow: inset 0 2px 8px var(--accent-light);
+}
+

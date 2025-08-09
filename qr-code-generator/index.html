@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generatore QR Code</title>
+  <style>
+    :root {
+      --bg-light: #f5f7fa;
+      --bg-dark: #1e1e2f;
+      --card-light: #ffffff;
+      --card-dark: #2a2a3d;
+      --text-light: #222222;
+      --text-dark: #dddddd;
+      --accent: #6c63ff;
+    }
+    [data-theme="light"] {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+    [data-theme="light"] .container {
+      background-color: var(--card-light);
+    }
+    [data-theme="dark"] {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    [data-theme="dark"] .container {
+      background-color: var(--card-dark);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    .container h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .container p {
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: border 0.3s;
+    }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+    button, .download-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .generate-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #574b90);
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .generate-btn:hover {
+      transform: scale(1.02);
+    }
+    .download-btn {
+      display: inline-block;
+      background: transparent;
+      color: var(--accent);
+      margin-top: 12px;
+      text-decoration: underline;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .download-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      font-size: 14px;
+      color: inherit;
+    }
+    .qr {
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 20px;
+      transition: max-height 0.8s ease, opacity 0.8s ease;
+      opacity: 0;
+    }
+    .qr.show-img {
+      max-height: 300px;
+      opacity: 1;
+    }
+    .qr img {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      .container h1 {
+        font-size: 20px;
+      }
+      input[type="text"] {
+        padding: 10px;
+      }
+      .generate-btn, .download-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body data-theme="light">
+     <button class="theme-toggle" onclick="toggleTheme()">Tema Scuro</button>
+  <div class="container">
+    <h1>Generatore QR Code</h1>
+    <p>Inserisci un testo o un link</p>
+    <input type="text" placeholder="Scrivi qui..." id="testo" />
+    <button class="generate-btn" onclick="generateQr()">Genera QR Code</button>
+    <div class="qr" id="qrBox">
+      <img src="" alt="QR Code" id="qrImg" />
+    </div>
+    <a id="downloadLink" class="download-btn" download="qrcode.png">Scarica QR Code</a>
+  </div>
+
+  <script>
+    function generateQr() {
+      const testo = document.getElementById("testo").value.trim();
+      const qrImg = document.getElementById("qrImg");
+      const qrBox = document.getElementById("qrBox");
+      const downloadLink = document.getElementById("downloadLink");
+
+      if (!testo) {
+        qrBox.classList.remove("show-img");
+        downloadLink.classList.remove("show");
+        alert("Inserisci del testo o un link valido!");
+        return;
+      }
+
+      const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(testo)}`;
+      qrImg.src = url;
+      qrBox.classList.add("show-img");
+
+      // Prepara il download
+      downloadLink.href = url;
+      downloadLink.classList.add("show");
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector('.theme-toggle');
+      const current = body.getAttribute('data-theme');
+      if (current === 'light') {
+        body.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Tema Chiaro';
+      } else {
+        body.setAttribute('data-theme', 'light');
+        btn.textContent = 'Tema Scuro';
+      }
+    }
+  </script>
+</body>
+</html>

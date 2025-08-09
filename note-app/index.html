@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Note</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+   <div class="container">
+        <h1><i class="fa-solid fa-book"></i> Note</h1>
+        <!-- Bottone per creare una nuova nota -->
+        <button id="btnCreaNote" class="btn">
+            <i class="fa-solid fa-pen-fancy"></i> Crea Nota
+        </button>
+        <!-- Bottone per cancellare tutte le note -->
+        <button id="btnCancellaTutto" class="btn btn-cancella">
+            <i class="fa-solid fa-trash"></i> Cancella Tutto
+        </button>
+        <!-- Contenitore per le note -->
+        <div class="note-container" id="contenitoreNote"></div>
+   </div>
+
+   <script>
+        // Selezione elementi
+        const contenitoreNote = document.getElementById("contenitoreNote");
+        const btnCreaNote     = document.getElementById("btnCreaNote");
+        const btnCancellaTutto= document.getElementById("btnCancellaTutto");
+
+        // Mostra note da localStorage
+        function mostraNote() {
+            const noteSalvate = localStorage.getItem("notes");
+            if (noteSalvate) {
+                contenitoreNote.innerHTML = noteSalvate;
+                attaccaEventiNote();
+            }
+        }
+
+        // Aggiorna localStorage
+        function aggiornaStorage() {
+            localStorage.setItem("notes", contenitoreNote.innerHTML);
+        }
+
+        // Aggiunge listener a ogni nota
+        function attaccaEventiNote() {
+            const tutteNote = contenitoreNote.querySelectorAll(".input-box");
+            tutteNote.forEach(nota => {
+                nota.addEventListener("keyup", aggiornaStorage);
+                const iconaCancella = nota.querySelector(".fa-trash");
+                if (iconaCancella) {
+                    iconaCancella.setAttribute("contenteditable", "false");
+                    iconaCancella.addEventListener("click", () => {
+                        // Applica animazione di uscita
+                        nota.classList.add('rimuovi');
+                        // Attende animazione prima di rimuovere
+                        setTimeout(() => {
+                            nota.remove();
+                            aggiornaStorage();
+                        }, 300);
+                    });
+                }
+            });
+        }
+
+        // Inizializza note e listener
+        mostraNote();
+
+        // Crea nuova nota al click
+        btnCreaNote.addEventListener("click", () => {
+            const nuovaNota = document.createElement("p");
+            const icona = document.createElement("i");
+            nuovaNota.className = "input-box";
+            nuovaNota.setAttribute("contenteditable", "true");
+            icona.className = "fa-solid fa-trash";
+            icona.setAttribute("contenteditable", "false");
+            nuovaNota.appendChild(icona);
+            contenitoreNote.appendChild(nuovaNota);
+            attaccaEventiNote();
+            aggiornaStorage();
+        });
+
+        // Cancella tutte le note al click
+        btnCancellaTutto.addEventListener("click", () => {
+            const note = contenitoreNote.querySelectorAll('.input-box');
+            note.forEach(nota => nota.classList.add('rimuovi'));
+            setTimeout(() => {
+                contenitoreNote.innerHTML = '';
+                aggiornaStorage();
+            }, 300);
+        });
+    </script>
+</body>
+</html>

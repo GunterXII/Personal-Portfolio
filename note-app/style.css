@@ -1,0 +1,117 @@
+:root {
+    /* Variabili globali per colori e dimensioni */
+    --colore-sfondo-container: linear-gradient(135deg, #6b7280, #1f2937);
+    --colore-primario: #3b82f6;
+    --colore-secondario: #6366f1;
+    --colore-testoinput: #111827;
+    --colore-bginput: #f9fafb;
+    --colore-icona-hover: #f472b6;
+    --colore-ombra: rgba(0, 0, 0, 0.15);
+    --raggio-bordi: 0.75rem;
+    --transizione-rapida: 0.3s;
+    --font-primario: 'Poppins', sans-serif;
+}
+
+/* Reset base: margini, padding e box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-primario);
+}
+
+/* Contenitore principale con sfondo gradient e padding */
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--colore-sfondo-container);
+    color: #f3f4f6;
+    padding: 4% 10%;
+}
+
+/* Titolo con icona e spaziatura */
+.container h1 {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 600;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Stile bottone di creazione nota */
+.container .btn {
+    display: inline-flex;
+    align-items: center;
+    background: var(--colore-primario);
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--raggio-bordi);
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px var(--colore-ombra);
+    transition: background var(--transizione-rapida), transform var(--transizione-rapida);
+    margin-bottom: 1.5rem;
+}
+.container .btn i {
+    margin-right: 0.5rem;
+}
+.container .btn:hover {
+    background: var(--colore-secondario);
+    transform: translateY(-3px);
+}
+
+/* Contenitore delle note, con gap e layout a colonna */
+.note-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Stile base di ogni nota (input-box) */
+.input-box {
+    position: relative;
+    background-color: var(--colore-bginput);
+    color: var(--colore-testoinput);
+    padding: 1rem;
+    border-radius: var(--raggio-bordi);
+    box-shadow: 0 4px 6px var(--colore-ombra);
+    outline: none;
+    min-height: 120px;
+    overflow: hidden;
+    /* Animazione di entrata */
+    animation: fadeIn var(--transizione-rapida) ease-out;
+}
+
+/* Icona di cancellazione posizionata in basso a destra */
+p i {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform var(--transizione-rapida), color var(--transizione-rapida);
+}
+p i:hover {
+    transform: translateY(-4px) scale(1.1);
+    color: var(--colore-icona-hover);
+}
+
+/* Classe da aggiungere in JS prima di rimuovere per animazione */
+.input-box.rimuovi {
+    /* Lancia animazione di uscita */
+    animation: fadeOut var(--transizione-rapida) ease-in forwards;
+}
+
+/* Animazione fade in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animazione fade out */
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-10px); }
+}

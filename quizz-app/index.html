@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App + Crea Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* RESET & BASE */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f7fa; color: #333; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .app { width: 100%; max-width: 600px; }
+
+    /* NAVBAR */
+    nav { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .mode-btn { padding: 0.5rem 1.5rem; border: none; border-radius: 1rem; cursor: pointer; background: #e0e0e0; font-weight: bold; transition: background 0.3s; }
+    .mode-btn.active { background: #6b73ff; color: #fff; }
+
+    /* SELECT/CARICA */
+    #quiz-select-container { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    #quiz-select, #load-quiz-btn { padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #ccc; }
+    #load-quiz-btn { background: #6b73ff; color: #fff; border: none; transition: background 0.3s; }
+    #load-quiz-btn:hover { background: #5a63d8; }
+
+    /* CREA QUIZ */
+    #create-section { background: #fff; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    #create-form label { display: block; margin-bottom: 0.75rem; font-weight: 500; }
+    #create-form input { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.5rem; margin-top: 0.25rem; }
+    .question-input { margin-bottom: 1rem; padding: 1rem; background: #fdfdfd; border: 1px solid #ddd; border-radius: 0.75rem; }
+    .question-input h3 { margin-bottom: 0.5rem; }
+    #create-form .btn { background: #ff758c; background: linear-gradient(135deg,#ff7eb3 0%,#ff758c 100%); color: #fff; border: none; border-radius: 1rem; padding: 0.75rem 1.5rem; cursor: pointer; transition: background 0.3s; }
+    #create-form .btn:hover { background: linear-gradient(135deg,#ff758c 0%,#ff7eb3 100%); }
+    #quiz-list { list-style: none; margin-top: 1rem; }
+    #quiz-list li { display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #eee; }
+    .delete-btn { background: #dc3545; color: #fff; border: none; border-radius: 0.5rem; padding: 0.25rem 0.75rem; cursor: pointer; transition: background 0.3s; }
+    .delete-btn:hover { background: #c82333; }
+
+    /* FAI QUIZ */
+    #quiz-section { background: #fff; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; }
+    #timer { position: absolute; top: 1rem; right: 1rem; background: #ffeb3b; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-weight: bold; }
+    #question { margin-bottom: 1rem; font-size: 1.2rem; }
+    #answer-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+    .btn { padding: 0.75rem; border: none; border-radius: 0.75rem; cursor: pointer; transition: transform 0.2s, background 0.2s; background: #f0f0f0; }
+    .btn:hover { transform: translateY(-2px); background: #e2e2e2; }
+    .correct, .wrong { animation: pulse 0.5s; }
+    .correct { background: #d4edda; border: 2px solid #28a745; }
+    .wrong { background: #f8d7da; border: 2px solid #dc3545; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+    /* RESPONSIVE */
+    @media(max-width: 480px) { #answer-buttons { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Quiz App</h1>
+    <nav>
+      <button id="take-mode" class="mode-btn active">Fai Quiz</button>
+      <button id="create-mode" class="mode-btn">Crea Quiz</button>
+    </nav>
+
+    <section id="quiz-section">
+      <div id="quiz-select-container">
+        <select id="quiz-select">
+          <option value="" disabled selected>Seleziona un quiz</option>
+        </select>
+        <button id="load-quiz-btn">Carica</button>
+      </div>
+      <div id="timer" class="hide">10</div>
+      <h2 id="question" class="hide">Domanda</h2>
+      <div id="answer-buttons"></div>
+      <button id="next-btn" class="hide">Prossimo</button>
+    </section>
+
+    <section id="create-section" class="hide">
+      <h2>Crea il tuo Quiz</h2>
+      <form id="create-form">
+        <label>Titolo Quiz:<input type="text" id="quiz-title" required></label>
+        <label>Numero di domande:<input type="number" id="quiz-count" min="1" value="1" required></label>
+        <div id="questions-container"></div>
+        <button type="submit" class="btn">Salva Quiz</button>
+      </form>
+      <h3>Quiz Salvati:</h3>
+      <ul id="quiz-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    class Question { constructor(text, answers) { this.text=text; this.answers=answers; } }
+    class Quiz { constructor(title, questions) { this.title=title; this.questions=questions; this.currentIndex=0; this.score=0; } getCurrentQuestion(){return this.questions[this.currentIndex];} next(){this.currentIndex++;} isFinished(){return this.currentIndex>=this.questions.length;} }
+
+    const takeModeBtn=document.getElementById('take-mode'), createModeBtn=document.getElementById('create-mode');
+    const quizSection=document.getElementById('quiz-section'), createSection=document.getElementById('create-section');
+    const quizSelect=document.getElementById('quiz-select'), loadQuizBtn=document.getElementById('load-quiz-btn');
+    const questionEl=document.getElementById('question'), answerButtonsEl=document.getElementById('answer-buttons');
+    const nextBtn=document.getElementById('next-btn'), timerEl=document.getElementById('timer');
+    const form=document.getElementById('create-form'), titleInput=document.getElementById('quiz-title');
+    const countInput=document.getElementById('quiz-count'), questionsContainer=document.getElementById('questions-container');
+    const quizList=document.getElementById('quiz-list');
+
+    let quiz, countdown; const TIME_PER_QUESTION=10;
+    function saveQuizzes(qs){ localStorage.setItem('quizzes', JSON.stringify(qs)); }
+    function loadQuizzes(){ return JSON.parse(localStorage.getItem('quizzes')||'[]'); }
+
+    function updateQuizList(){ quizList.innerHTML=''; loadQuizzes().forEach((q,i)=>{ const li=document.createElement('li'); li.textContent=q.title; const del=document.createElement('button'); del.textContent='Elimina'; del.classList.add('delete-btn'); del.onclick=()=>{ let arr=loadQuizzes(); arr.splice(i,1); saveQuizzes(arr); populateQuizSelect(); updateQuizList(); }; li.appendChild(del); quizList.appendChild(li); }); }
+
+    function populateQuizSelect(){ quizSelect.innerHTML='<option value="" disabled selected>Seleziona un quiz</option>'; loadQuizzes().forEach((q,i)=>{ let opt=document.createElement('option'); opt.value=i; opt.text=q.title; quizSelect.appendChild(opt); }); }
+    loadQuizBtn.onclick=()=>{ if(!quizSelect.value) return; let sel=loadQuizzes()[quizSelect.value]; quiz=new Quiz(sel.title, sel.questions.map(x=>new Question(x.text,x.answers))); startQuiz(); }
+
+    takeModeBtn.onclick=()=>switchMode('take'); createModeBtn.onclick=()=>switchMode('create');
+    function switchMode(m){ clearInterval(countdown); resetQuizUI(); if(m==='take'){ takeModeBtn.classList.add('active'); createModeBtn.classList.remove('active'); quizSection.classList.remove('hide'); createSection.classList.add('hide'); populateQuizSelect(); } else { createModeBtn.classList.add('active'); takeModeBtn.classList.remove('active'); createSection.classList.remove('hide'); quizSection.classList.add('hide'); buildQuestionInputs(); updateQuizList(); }}
+    function resetQuizUI(){ timerEl.classList.add('hide'); questionEl.classList.add('hide'); nextBtn.classList.add('hide'); answerButtonsEl.innerHTML=''; }
+
+    countInput.onchange=buildQuestionInputs;
+    function buildQuestionInputs(){ questionsContainer.innerHTML=''; for(let i=0;i<parseInt(countInput.value);i++){ let div=document.createElement('div'); div.classList.add('question-input'); div.innerHTML=`<h3>Domanda ${i+1}</h3><input class="q-text" placeholder="Testo domanda" required><label>Corretta:<input class="a-correct" required></label><label>Sbagliate:<input class="a-wrong" placeholder="A,B,C" required></label><hr>`; questionsContainer.appendChild(div);} }
+
+    form.onsubmit=e=>{ e.preventDefault(); let arr=[]; document.querySelectorAll('.question-input').forEach(d=>{ let t=d.querySelector('.q-text').value; let c=d.querySelector('.a-correct').value; let w=d.querySelector('.a-wrong').value.split(','); arr.push({text:t,answers:[{text:c,correct:true},...w.map(x=>({text:x.trim(),correct:false}))]});}); let qs=loadQuizzes(); qs.push({title:titleInput.value,questions:arr}); saveQuizzes(qs); updateQuizList(); populateQuizSelect(); alert('Quiz creato!'); switchMode('take'); };
+
+    function startQuiz(){ quiz.currentIndex=0; quiz.score=0; nextBtn.textContent='Prossimo'; nextBtn.classList.add('hide'); showQuestion(); }
+    function showQuestion(){ resetState(); let q=quiz.getCurrentQuestion(); questionEl.classList.remove('hide'); questionEl.textContent=q.text; q.answers.forEach(a=>{ let b=document.createElement('button'); b.textContent=a.text; b.classList.add('btn'); if(a.correct) b.dataset.correct=true; b.onclick=selectAnswer; answerButtonsEl.appendChild(b); }); timerEl.classList.remove('hide'); startTimer(); }
+    function resetState(){ clearInterval(countdown); timerEl.textContent=TIME_PER_QUESTION; nextBtn.classList.add('hide'); answerButtonsEl.innerHTML=''; }
+    function startTimer(){ let t=TIME_PER_QUESTION; timerEl.textContent=t; countdown=setInterval(()=>{ t--; timerEl.textContent=t; if(t<=0){ clearInterval(countdown); Array.from(answerButtonsEl.children).forEach(b=>{ setStatusClass(b,b.dataset.correct==='true'); b.disabled=true; }); nextBtn.classList.remove('hide'); } },1000); }
+    function selectAnswer(e){ clearInterval(countdown); let ok=e.target.dataset.correct==='true'; Array.from(answerButtonsEl.children).forEach(b=>{ setStatusClass(b,b.dataset.correct==='true'); b.disabled=true; }); if(ok) quiz.score++; nextBtn.classList.remove('hide'); }
+    function setStatusClass(b,ok){ b.classList.remove('correct','wrong'); b.classList.add(ok?'correct':'wrong'); }
+    nextBtn.onclick=()=>{ quiz.next(); if(quiz.isFinished()) showScore(); else showQuestion(); };
+    function showScore(){ clearInterval(countdown); resetQuizUI(); questionEl.classList.remove('hide'); questionEl.textContent=`Hai risposto ${quiz.score} di ${quiz.questions.length}`; nextBtn.textContent='Ricomincia'; nextBtn.classList.remove('hide'); nextBtn.onclick=()=>switchMode('take'); }
+
+    // init
+    switchMode('take');
+  </script>
+</body>
+</html>

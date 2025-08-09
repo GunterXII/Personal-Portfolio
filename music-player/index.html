@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MP3 Player</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/44e0f7387b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+
+    <!-- barra di ricerca -->
+    <div class="search-bar">
+      <input type="text" placeholder="Cerca una canzone..." id="searchInput" />
+      <button id="searchBtn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+
+    <!-- player -->
+    <div class="music-player">
+      <nav>
+        <div class="circle"><i class="fa-solid fa-angle-left"></i></div>
+        <div class="circle"><i class="fa-solid fa-bars"></i></div>
+      </nav>
+
+      <!-- copertina con id corretto -->
+      <div class="cover">
+        <img src="" alt="" class="song-img" id="cover">
+      </div>
+
+      <!-- titolo e artista con id -->
+      <h1 id="title"></h1>
+      <p id="artist"></p>
+
+      <!-- audio e source con id -->
+      <audio controls id="song">
+        <source src="" type="audio/mpeg" id="source">
+        Il tuo browser non supporta l’audio.
+      </audio>
+
+      <!-- progress bar -->
+      <input type="range" value="0" id="progress">
+
+      <!-- controlli -->
+      <div class="controls">
+        <div id="prevBtn"><i class="fa-solid fa-backward"></i></div>
+        <div id="playBtn"><i class="fa-solid fa-play" id="ctrlicon"></i></div>
+        <div id="nextBtn"><i class="fa-solid fa-forward"></i></div>
+        <div id="loop"><i class="fa-solid fa-repeat"></i></div>
+      </div>
+    </div>
+    <!-- 1. Pulsante per aprire il form di creazione playlist -->
+<button id="openPlaylistForm">Crea playlist</button>
+
+<!-- 2. Form di input nascosto inizialmente -->
+<div id="playlistFormContainer" class="hidden">
+  <form id="playlistForm">
+    <input type="text" id="newSongTitle"  placeholder="Titolo brano" required />
+    <input type="text" id="newSongURL"    placeholder="URL file audio (mp3)" required />
+    <button type="submit">Aggiungi</button>
+  </form>
+</div>
+
+
+<!-- 3. Contenitore dove verrà renderizzata la playlist -->
+<ul id="playlistContainer"></ul>
+
+  </div>
+
+  <!-- SCRIPT: sempre dopo il DOM -->
+  <script>
+  // 1. Selezione di tutti gli elementi dal DOM che ci serviranno
+  const searchInput = document.getElementById("searchInput"); // campo di testo per la query
+  const searchBtn   = document.getElementById("searchBtn");   // bottone di ricerca
+
+  const song     = document.getElementById("song");     // elemento <audio>
+  const source   = document.getElementById("source");   // <source> dentro <audio>
+  const title    = document.getElementById("title");    // <h1> del titolo
+  const artist   = document.getElementById("artist");   // <p> del nome artista
+  const cover    = document.getElementById("cover");    // <img> copertina
+  const progress = document.getElementById("progress"); // barra di avanzamento (<input type="range">)
+  const playBtn  = document.getElementById("playBtn");  // bottone play/pause
+  const ctrlicon = document.getElementById("ctrlicon"); // icona interna al bottone play/pause
+  const reset=document.getElementById("prevBtn")
+  const loopBtn=document.getElementById("loop")
+  let isLooping = false;
+  // ==== PLAYLIST SETUP ====
+
+// 1. Dichiaro array vuoto per la playlist
+
+
+// 2. Seleziono elementi dal DOM
+const openFormBtn      = document.getElementById("openPlaylistForm");
+const formContainer    = document.getElementById("playlistFormContainer");
+const playlistForm     = document.getElementById("playlistForm");
+const newSongTitleInput = document.getElementById("newSongTitle");
+const playlistContainer = document.getElementById("playlistContainer");
+
+let playlist = []; // array di soli titoli
+
+  // mostra/nasconde il form di creazione
+  openFormBtn.addEventListener("click", () => {
+    formContainer.classList.toggle("show");
+    formContainer.classList.toggle("hidden");
+  });
+
+  // aggiunge un nuovo titolo a playlist e la rende
+  playlistForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const titleText = newSongTitleInput.value.trim();
+    if (!titleText) return;
+
+    playlist.push({ title: titleText });
+    newSongTitleInput.value = "";
+    renderPlaylist();
+  });
+
+  // disegna la playlist in pagina
+  function renderPlaylist() {
+    playlistContainer.innerHTML = "";
+    playlist.forEach((track, idx) => {
+      const li = document.createElement("li");
+      li.textContent = track.title;
+      li.dataset.index = idx;
+      // al click su una voce, faccio la ricerca automatica
+      li.addEventListener("click", () => {
+        doSearch(track.title);
+      });
+      playlistContainer.appendChild(li);
+    });
+  }
+
+
+
+// ===== FINE PLAYLIST SETUP =====
+
+
+  reset.addEventListener("click", restart)
+  function restart(){
+    song.currentTime=0
+    song.play()
+  }
+  loopBtn.addEventListener("click", toggleLoop);
+  function toggleLoop() {
+  isLooping = !isLooping;         // cambia stato: true → false o viceversa
+  song.loop = isLooping;          // imposta la proprietà audio.loop
+  loopBtn.style.backgroundColor = isLooping ? "#ff6b81" : "transparent"; // evidenzia se attivo
+}
+
+  // 2. Gestione dei metadati: una volta che il file audio è caricato, conosciamo la durata
+  song.addEventListener("loadedmetadata", () => {
+    // Imposto il massimo della barra al numero di secondi totali
+    progress.max   = song.duration;
+    // Inizializzo la barra al tempo corrente (0 se non è ancora partito)
+    progress.value = song.currentTime;
+  });
+
+  // 3. Sincronizzazione automatica della barra di avanzamento
+  song.addEventListener("timeupdate", () => {
+    // Aggiorno il valore della barra ad ogni cambiamento del currentTime
+    progress.value = song.currentTime;
+  });
+
+  // 4. Salto nel brano quando l’utente muove la barra (input in tempo reale)
+  progress.addEventListener("input", () => {
+    // Posiziono la riproduzione al punto selezionato dall’utente
+    song.currentTime = progress.value;
+
+    // Se il brano è in pausa, avvialo e cambia icona
+    if (song.paused) {
+      song.play()
+        .then(() => {
+          // Sostituisco la class dell’icona da play a pause
+          ctrlicon.classList.replace("fa-play", "fa-pause");
+        })
+        .catch(console.error);
+    }
+  });
+
+  // 5. Funzione di toggling Play/Pause
+  function playPause() {
+    if (song.paused) {
+      // Se è in pausa, avvia la riproduzione
+      song.play()
+        .then(() => {
+          ctrlicon.classList.replace("fa-play", "fa-pause");
+        })
+        .catch(err => console.error("Play fallito:", err));
+    } else {
+      // Se sta suonando, metti in pausa
+      song.pause();
+      ctrlicon.classList.replace("fa-pause", "fa-play");
+    }
+  }
+  // Collego la funzione al click del bottone
+  playBtn.addEventListener("click", playPause);
+
+  // 6. Callback globale per il JSONP di iTunes Search API
+  //    Riceve i dati JSON e aggiorna il player
+  window.handleItunesSearch = function(data) {
+    // Controllo se ci sono risultati
+    if (!data.results || data.results.length === 0) {
+      alert("Nessun risultato trovato!");
+      return;
+    }
+
+    // Estraggo la query dell’utente per confronto
+    const query = searchInput.value.trim().toLowerCase();
+
+    // Trovo un risultato il cui titolo contenga la query (match parziale)
+    let result = data.results.find(r =>
+      r.trackName.toLowerCase().includes(query)
+    );
+
+    // Se non trovo corrispondenze strettamente rilevanti, uso il primo risultato
+    if (!result) {
+      result = data.results[0];
+    }
+
+    // Aggiorno il titolo, artista e copertina nel DOM
+    title.textContent  = result.trackName;
+    artist.textContent = result.artistName;
+    cover.src          = result.artworkUrl100.replace("100x100", "300x300");
+
+    // Aggiorno la sorgente audio
+    source.src = result.previewUrl;
+
+    // Ricarico l’audio e lo avvio subito
+    song.load();
+    song.play()
+      .then(() => {
+        ctrlicon.classList.replace("fa-play", "fa-pause");
+      })
+      .catch(console.error);
+  };
+
+  // 7. Gestione del click sul bottone di ricerca
+  searchBtn.addEventListener("click", () => {
+    const query = searchInput.value.trim();
+    if (!query) {
+      alert("Inserisci il nome di una canzone!");
+      return;
+    }
+
+    // Rimuovo eventuali script JSONP precedenti per non duplicare callback
+    const old = document.getElementById("itunesJSONP");
+    if (old) old.remove();
+
+    // Costruisco dinamicamente un tag <script> per JSONP
+    const script = document.createElement("script");
+    script.id = "itunesJSONP";
+
+    // URL con parametri:
+    //  - term: la query codificata
+    //  - media=music e entity=musicTrack per limitare ai brani
+    //  - attribute=songTerm per cercare nel titolo
+    //  - limit=10 per avere più opzioni
+    //  - callback=handleItunesSearch per specificare la funzione da chiamare
+    script.src = 
+      `https://itunes.apple.com/search?` +
+      `term=${encodeURIComponent(query)}` +
+      `&media=music` +
+      `&entity=musicTrack` +
+      `&attribute=songTerm` +
+      `&limit=10` +
+      `&callback=handleItunesSearch`;
+
+    // Aggiungo lo script al body: verrà eseguito e invierà i dati a handleItunesSearch
+    document.body.appendChild(script);
+  });
+
+  //vorrei aggiungere la possibilita di creare playlist, ovviamente inizialmente sara array vuoto
+  //poi in html dovrei aaggiungere una scritta crea playlist che mi apre un form con una transizione, nel quale ci metto solo un input text che prende titolo della canzone
+  //attraverso il dom, prendo il titolo e faccio un push nella playlist
+  //poi devo creare una funzione renderPlaylist per far vedere a schermo la playlist, e ogni volta che clicco sul nome della canzone, questa ca
+</script>
+
+</body>
+</html>

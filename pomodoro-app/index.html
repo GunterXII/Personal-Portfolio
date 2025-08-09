@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Pomodoro App</title>
+  <link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="container">
+    <div class="pomodoro-container">
+      <svg class="progress-ring" width="200" height="200">
+        <circle
+          class="progress-ring__circle"
+          stroke="#5f8d4e"
+          stroke-width="10"
+          fill="transparent"
+          r="90"
+          cx="100"
+          cy="100"
+        />
+      </svg>
+      <div id="timer">25:00</div>
+    </div>
+
+    <div class="buttons">
+      <button id="start">Start</button>
+      <button id="pause">Pausa</button>
+      <button id="reset">Reset</button>
+    </div>
+  </div>
+
+  <script >
+    // Carica il suono tic
+const tickSound = new Audio('475188__sheyvan__button-clicking-1.wav'); // Assicurati che il file sia in sounds/tick.mp3
+tickSound.volume = 0.3; // volume più basso (opzionale)
+
+const timerDisplay = document.getElementById("timer");
+const startBtn      = document.getElementById("start");
+const pauseBtn      = document.getElementById("pause");
+const resetBtn      = document.getElementById("reset");
+
+// Configurazione timer
+let timeLeft  = 25 * 60; // 25 minuti
+let timer     = null;
+let isRunning = false;
+
+// Setup cerchio SVG
+const circle        = document.querySelector(".progress-ring__circle");
+const radius        = circle.r.baseVal.value;
+const circumference = 2 * Math.PI * radius;
+circle.style.strokeDasharray  = `${circumference} ${circumference}`;
+circle.style.strokeDashoffset = circumference;
+
+// Funzione per regolare il cerchio (percentuale tra 0 e 100)
+function setProgress(percent) {
+  const offset = circumference - (percent / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+}
+
+// Mostra timer e cerchio
+function updateTimerAndCircle() {
+  // Text MM:SS
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  timerDisplay.textContent =
+    String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+
+  // Cerchio
+  const percent = (timeLeft / (25 * 60)) * 100;
+  setProgress(percent);
+}
+
+// --- Eventi ---
+startBtn.addEventListener("click", () => {
+  tickSound.play();
+  if (isRunning) return;
+  isRunning = true;
+
+  timer = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerAndCircle();        // <--- qui!
+    } else {
+      clearInterval(timer);
+      isRunning = false;
+      tickSound.play();              // opzionale, un tic finale
+      alert("Tempo scaduto! Fai una pausa 🍵");
+    }
+  }, 1000);
+});
+
+pauseBtn.addEventListener("click", () => {
+  tickSound.play();
+  clearInterval(timer);
+  isRunning = false;
+});
+
+resetBtn.addEventListener("click", () => {
+  tickSound.play();
+  clearInterval(timer);
+  isRunning = false;
+  timeLeft = 25 * 60;
+  updateTimerAndCircle();          // <--- reinizializza timer + cerchio
+});
+
+// All’avvio
+updateTimerAndCircle();
+
+  </script>
+</body>
+</html>
